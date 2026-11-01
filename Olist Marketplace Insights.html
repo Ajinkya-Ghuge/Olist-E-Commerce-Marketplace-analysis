@@ -1,0 +1,750 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Olist Marketplace Insights</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Layout concept: one calm scrolling page. Plain-language headline per section, one interactive card beneath it, a sticky section nav on top. */
+:root{
+  --bg:#EDF1F0; --surface:#FFFFFF; --ink:#0F2220; --ink2:#3F504D; --muted:#566764;
+  --line:#D6DFDD; --grid:#E4EBE9; --hover:#F1F5F4;
+  --accent:#0A7B76; --accent-soft:#CDE7E4;
+  --good:#1C8A57; --warn:#C47F00; --bad:#C2402D; --neutral:#97A8A5;
+  --tip-bg:#0F2220; --tip-fg:#F2F7F6; --tip-mut:#A8BDBA; --tip-up:#5EDB9C; --tip-down:#FF9C88;
+  --display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --body:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0A1312; --surface:#111E1D; --ink:#E8F1EF; --ink2:#B9C9C6; --muted:#8FA3A0;
+    --line:#223533; --grid:#1A2B2A; --hover:#172928;
+    --accent:#3CC4B9; --accent-soft:#17403D;
+    --good:#4CC88B; --warn:#E5AA3C; --bad:#FF8570; --neutral:#62736F;
+    --tip-bg:#E8F1EF; --tip-fg:#0A1312; --tip-mut:#4A5C59; --tip-up:#157A4A; --tip-down:#B63A27;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A1312; --surface:#111E1D; --ink:#E8F1EF; --ink2:#B9C9C6; --muted:#8FA3A0;
+  --line:#223533; --grid:#1A2B2A; --hover:#172928;
+  --accent:#3CC4B9; --accent-soft:#17403D;
+  --good:#4CC88B; --warn:#E5AA3C; --bad:#FF8570; --neutral:#62736F;
+  --tip-bg:#E8F1EF; --tip-fg:#0A1312; --tip-mut:#4A5C59; --tip-up:#157A4A; --tip-down:#B63A27;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.topin{display:flex;flex-wrap:wrap;align-items:center;gap:4px 24px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px;font:700 17px/1 var(--display);letter-spacing:-.01em}
+.mark{display:inline-flex;align-items:flex-end;gap:2px;height:18px}
+.mark i{display:block;width:4px;background:var(--accent);border-radius:1px 1px 0 0}
+.mark i:nth-child(1){height:7px}.mark i:nth-child(2){height:12px}.mark i:nth-child(3){height:18px}
+.nav{display:flex;gap:2px;overflow-x:auto;min-width:0;flex:1;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav button{background:none;border:0;padding:7px 11px;border-radius:7px;color:var(--ink2);font-size:14px;white-space:nowrap}
+.nav button:hover{background:var(--hover);color:var(--ink)}
+.nav button.on{background:var(--accent-soft);color:var(--ink);font-weight:600}
+
+/* hero */
+.hero{padding-top:44px}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+h1{font:700 clamp(32px,5.4vw,56px)/1.04 var(--display);letter-spacing:-.025em;margin:0 0 14px;max-width:18ch;text-wrap:balance}
+.lead{font-size:clamp(16px,1.6vw,18px);color:var(--ink2);max-width:60ch;margin:0 0 28px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 16px 14px;min-width:0}
+.kpi span{display:block;font-size:13px;color:var(--muted)}
+.kpi b{display:block;font:700 clamp(26px,3vw,34px)/1.1 var(--display);letter-spacing:-.02em;margin:6px 0 4px;font-variant-numeric:tabular-nums}
+.kpi small{display:block;font-size:13px;color:var(--ink2)}
+.brief{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px}
+.brief-card{display:flex;flex-direction:column;gap:8px;text-align:left;background:transparent;border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.brief-card:hover{background:var(--surface);border-color:var(--accent)}
+.brief-card strong{font-weight:600;font-size:15px;line-height:1.4}
+.brief-card .go{font-size:13px;color:var(--accent);font-weight:600;margin-top:auto}
+.tag{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+
+/* sections */
+section{padding-top:56px;scroll-margin-top:72px}
+h2{font:700 clamp(24px,3.2vw,34px)/1.12 var(--display);letter-spacing:-.02em;margin:8px 0 10px;max-width:26ch;text-wrap:balance}
+.sec-p{color:var(--ink2);max-width:62ch;margin:0 0 22px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,430px),1fr));gap:16px}
+.stackv{display:grid;gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;min-width:0}
+.chead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:10px 16px;margin-bottom:14px}
+.chead h3{font:600 17px/1.25 var(--display);margin:0}
+.chead p{margin:3px 0 0;font-size:13px;color:var(--muted);max-width:44ch}
+.ctrls{display:flex;flex-wrap:wrap;gap:8px}
+.seg{display:inline-flex;background:var(--grid);border-radius:8px;padding:3px;gap:2px;max-width:100%;flex-wrap:wrap}
+.seg button{background:transparent;border:0;border-radius:6px;padding:5px 11px;font-size:13px;color:var(--ink2)}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 0 0 1px var(--line)}
+.note{margin:14px 0 0;font-size:14px;color:var(--ink2);max-width:70ch}
+.note b{color:var(--ink)}
+.chartbox{min-width:0;overflow:hidden}
+.card.as-table .chartbox{display:none}
+.card:not(.as-table) .tablebox{display:none}
+.tablebox{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-weight:600;color:var(--muted)}
+td{font-variant-numeric:tabular-nums}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.stat span{display:block;font-size:13px;color:var(--muted)}
+.stat b{display:block;font:600 16px/1.3 var(--display);font-variant-numeric:tabular-nums}
+
+/* trend svg */
+svg.trend{display:block;touch-action:pan-y}
+svg.trend .grid{stroke:var(--grid);stroke-width:1}
+svg.trend .axis{stroke:var(--line);stroke-width:1}
+svg.trend .ylab,svg.trend .xlab{fill:var(--muted);font:11px var(--mono)}
+svg.trend .area{fill:var(--accent);fill-opacity:.13}
+svg.trend .line{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+svg.trend .dot{fill:var(--accent)}
+svg.trend .peak{fill:var(--accent);stroke:var(--surface);stroke-width:2}
+svg.trend .annot{fill:var(--ink);font:600 12px var(--body)}
+svg.trend .xh{stroke:var(--ink2);stroke-width:1;stroke-dasharray:3 3}
+svg.trend .hdot{fill:var(--accent);stroke:var(--surface);stroke-width:2.5}
+svg.trend:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:4px}
+
+/* horizontal bars */
+.blist{display:grid;gap:2px}
+.brow{display:grid;grid-template-columns:minmax(100px,175px) 1fr 76px;align-items:center;gap:10px;padding:5px 6px;border-radius:7px}
+.brow:hover,.brow:focus-visible{background:var(--hover)}
+.blabel{font-size:14px;min-width:0;overflow-wrap:anywhere}
+.btrack{height:14px;background:var(--grid);border-radius:4px;overflow:hidden}
+.bfill{height:100%;width:0;background:var(--accent);border-radius:4px;transition:width .5s ease}
+.brow.dim .bfill{background:var(--accent);opacity:.5}
+.bval{text-align:right;font:500 12px var(--mono);color:var(--ink2)}
+@media (max-width:520px){
+  .brow{grid-template-columns:1fr auto;grid-template-areas:"l v" "t t";row-gap:3px}
+  .blabel{grid-area:l}.bval{grid-area:v}.btrack{grid-area:t}
+}
+
+/* vertical bars */
+.vplot{padding-top:26px}
+.vinner{position:relative;height:200px;display:flex;gap:clamp(8px,3%,22px);border-bottom:1px solid var(--line)}
+.vcol{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;border-radius:6px 6px 0 0}
+.vcol:hover,.vcol:focus-visible{background:var(--hover)}
+.vval{font:500 12px var(--mono);margin-bottom:4px;color:var(--ink)}
+.vbar{width:min(100%,68px);height:0;border-radius:4px 4px 0 0;transition:height .5s ease}
+.c-good{background:var(--good)}.c-warn{background:var(--warn)}.c-bad{background:var(--bad)}.c-neutral{background:var(--neutral)}.c-accent{background:var(--accent)}
+.vlabels{display:flex;gap:clamp(8px,3%,22px);padding-top:8px}
+.vlabels span{flex:1;min-width:0;text-align:center;font-size:13px;color:var(--ink2);line-height:1.3}
+.vlabels small{display:block;color:var(--muted);font-size:12px}
+.vref{position:absolute;left:0;right:0;border-top:2px dashed var(--ink2);pointer-events:none;z-index:2}
+.vref span{position:absolute;right:0;bottom:3px;font-size:12px;color:var(--ink2);background:var(--surface);padding:0 4px;border-radius:3px}
+
+/* legend, stack, waffle */
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:12px;font-size:14px;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend b{color:var(--ink);font-variant-numeric:tabular-nums}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;flex:none}
+.stack{display:flex;gap:2px;height:30px}
+.stack>div{height:100%;min-width:6px}
+.stack>div:first-child{border-radius:6px 0 0 6px}.stack>div:last-child{border-radius:0 6px 6px 0}
+.waffle{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;width:min(100%,340px);margin:4px auto 0}
+.wcell{aspect-ratio:1;border-radius:3px;display:block}
+.wcell.one{background:var(--accent)}.wcell.rep{background:var(--warn)}
+.wcell:hover,.wcell:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+.wcap{text-align:center;font-size:13px;color:var(--muted);margin:10px 0 0}
+
+/* takeaways */
+.ideas{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.idea{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.idea h3{font:600 16px/1.3 var(--display);margin:8px 0 6px}
+.idea p{margin:0;font-size:14px;color:var(--ink2)}
+footer{margin-top:64px;padding-block:24px 8px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);max-width:80ch}
+
+/* tooltip */
+.tip{position:fixed;left:0;top:0;z-index:50;min-width:150px;max-width:260px;background:var(--tip-bg);color:var(--tip-fg);border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.4;pointer-events:none;visibility:hidden;opacity:0;transition:opacity .12s;box-shadow:0 6px 20px rgba(0,0,0,.22)}
+.tip.show{visibility:visible;opacity:1}
+.t-title{font-weight:600;font-size:14px}
+.t-sub{color:var(--tip-mut);font-size:12px;margin-top:1px}
+.t-big{font:700 22px/1.2 var(--display);margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.t-row{display:flex;justify-content:space-between;gap:16px;margin-top:3px}
+.t-row span{color:var(--tip-mut)}
+.t-row b{font-weight:600;font-variant-numeric:tabular-nums}
+.t-note{margin-top:6px;color:var(--tip-mut);font-size:12px}
+.t-up{color:var(--tip-up);font-weight:600}.t-down{color:var(--tip-down);font-weight:600}
+
+@media (prefers-reduced-motion:reduce){.bfill,.vbar,.tip{transition:none}}
+@media (max-width:520px){.card{padding:16px}.hero{padding-top:28px}section{padding-top:44px}}
+</style>
+
+<header class="top">
+  <div class="wrap topin">
+    <div class="brand"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>Olist Insights</div>
+    <nav class="nav" aria-label="Sections">
+      <button data-go="overview">Overview</button>
+      <button data-go="growth">Growth</button>
+      <button data-go="products">Products</button>
+      <button data-go="customers">Customers</button>
+      <button data-go="delivery">Delivery and reviews</button>
+      <button data-go="payments">Payments</button>
+      <button data-go="next">Where to look next</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="overview" class="hero">
+  <p class="eyebrow">Brazilian e-commerce · Sep 2016 to Aug 2018</p>
+  <h1>What 96,000 orders tell us about Olist</h1>
+  <p class="lead">Olist is an online marketplace in Brazil. This page turns the project's analysis into charts you can hover over, filter and switch between. Each section starts with the answer in one sentence.</p>
+
+  <div class="kpis">
+    <div class="kpi"><span>Total revenue</span><b>R$&nbsp;15.49M</b><small>Sep 2016 to Aug 2018</small></div>
+    <div class="kpi"><span>Orders</span><b>96,478</b><small>About R$161 per order</small></div>
+    <div class="kpi"><span>Customers</span><b>93,358</b><small>96.9% bought only once</small></div>
+    <div class="kpi"><span>Delivered on time</span><b>91.9%</b><small>7,865 orders arrived late</small></div>
+    <div class="kpi"><span>Average review</span><b>4.15 / 5</b><small>79% gave 4 or 5 stars</small></div>
+  </div>
+
+  <div class="brief">
+    <button class="brief-card" data-go="growth"><span class="tag">Growth</span><strong>Monthly sales grew more than eightfold in a year, then stayed near R$1M.</strong><span class="go">See the trend</span></button>
+    <button class="brief-card" data-go="products"><span class="tag">Products</span><strong>Five categories bring in about 35% of all revenue.</strong><span class="go">See the categories</span></button>
+    <button class="brief-card" data-go="customers"><span class="tag">Customers</span><strong>Only 3 in 100 customers ever came back for a second order.</strong><span class="go">See repeat buying</span></button>
+    <button class="brief-card" data-go="delivery"><span class="tag">Delivery</span><strong>Ratings drop from 4.2 to 1.7 stars when an order arrives very late.</strong><span class="go">See the impact</span></button>
+  </div>
+</section>
+
+<section id="growth">
+  <span class="tag">Growth</span>
+  <h2>Monthly sales grew more than eightfold in a year, then levelled off</h2>
+  <p class="sec-p">Hover over the line to read any month. Use the buttons to switch between revenue, orders and the running total.</p>
+  <div class="card" id="cTrend">
+    <div class="chead">
+      <div><h3 id="trendTitle">Revenue per month</h3><p id="trendSub">In Brazilian reais (R$). Hover or use the arrow keys.</p></div>
+      <div class="ctrls">
+        <div class="seg" id="segMetric" role="group" aria-label="Measure">
+          <button data-v="rev" aria-pressed="true">Revenue</button>
+          <button data-v="ord" aria-pressed="false">Orders</button>
+          <button data-v="cum" aria-pressed="false">Running total</button>
+        </div>
+        <div class="seg" id="segRange" role="group" aria-label="Time range">
+          <button data-v="all" aria-pressed="true">All months</button>
+          <button data-v="2017" aria-pressed="false">2017</button>
+          <button data-v="2018" aria-pressed="false">2018</button>
+        </div>
+        <div class="seg" data-view role="group" aria-label="View">
+          <button data-v="chart" aria-pressed="true">Chart</button>
+          <button data-v="table" aria-pressed="false">Table</button>
+        </div>
+      </div>
+    </div>
+    <div class="chartbox" id="trendChart"></div>
+    <div class="tablebox" id="trendTable"></div>
+    <div class="stats" id="trendStats"></div>
+    <p class="note" id="trendNote"></p>
+    <p class="note" style="font-size:13px;color:var(--muted)">The chart starts in January 2017. September to December 2016 had only about 270 orders in total, so they are left out of the line but counted in the running total.</p>
+  </div>
+</section>
+
+<section id="products">
+  <span class="tag">Products</span>
+  <h2>Five categories bring in about a third of all revenue</h2>
+  <p class="sec-p">Switch the measure to see that the category that earns the most is not always the one with the most orders.</p>
+  <div class="card" id="cCat">
+    <div class="chead">
+      <div><h3>Top 15 product categories</h3><p id="catSub">Total revenue per category. Hover a bar for details.</p></div>
+      <div class="ctrls">
+        <div class="seg" id="segCat" role="group" aria-label="Measure">
+          <button data-v="rev" aria-pressed="true">Revenue</button>
+          <button data-v="ord" aria-pressed="false">Orders</button>
+          <button data-v="aov" aria-pressed="false">Revenue per order</button>
+        </div>
+        <div class="seg" data-view role="group" aria-label="View">
+          <button data-v="chart" aria-pressed="true">Chart</button>
+          <button data-v="table" aria-pressed="false">Table</button>
+        </div>
+      </div>
+    </div>
+    <div class="chartbox"><div class="blist" id="catList"></div></div>
+    <div class="tablebox" id="catTable"></div>
+    <p class="note" id="catNote"></p>
+    <p class="note" style="font-size:13px;color:var(--muted)">Order counts are read from the bubble chart, so treat them as close estimates.</p>
+  </div>
+</section>
+
+<section id="customers">
+  <span class="tag">Customers</span>
+  <h2>Almost every customer buys once, and most live in three states</h2>
+  <p class="sec-p">Two views of who the customers are: how often they buy, and where they live.</p>
+  <div class="grid2">
+    <div class="card" id="cWaffle">
+      <div class="chead"><div><h3>How many times do customers buy?</h3><p>Each square is 1 customer out of 100.</p></div></div>
+      <div class="chartbox"><div class="waffle" id="waffle" role="img" aria-label="97 of 100 customers bought once, 3 of 100 bought more than once"></div></div>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--accent)"></i>Bought once <b>96.9%</b></span>
+        <span><i class="sw" style="background:var(--warn)"></i>Bought twice <b>2.9%</b></span>
+        <span><i class="sw" style="background:var(--warn)"></i>Three or more times <b>0.3%</b></span>
+      </div>
+      <div class="stats">
+        <div class="stat"><span>Typical customer (median) spent</span><b>R$&nbsp;108</b></div>
+        <div class="stat"><span>Average customer spent</span><b>R$&nbsp;166</b></div>
+      </div>
+      <p class="note">The average is higher than the median because a small group of big spenders pulls it up.</p>
+    </div>
+    <div class="card" id="cState">
+      <div class="chead">
+        <div><h3>Top 10 states by customers</h3><p>Customer counts are close estimates from the chart.</p></div>
+        <div class="seg" data-view role="group" aria-label="View">
+          <button data-v="chart" aria-pressed="true">Chart</button>
+          <button data-v="table" aria-pressed="false">Table</button>
+        </div>
+      </div>
+      <div class="chartbox"><div class="blist" id="stateList"></div></div>
+      <div class="tablebox" id="stateTable"></div>
+      <p class="note" id="stateNote"></p>
+    </div>
+  </div>
+</section>
+
+<section id="delivery">
+  <span class="tag">Delivery and reviews</span>
+  <h2>Late delivery is what turns a good review into a bad one</h2>
+  <p class="sec-p">Most orders arrive on time. The few that do not receive far lower ratings.</p>
+  <div class="stackv">
+    <div class="card" id="cOnTime">
+      <div class="chead"><div><h3>Were orders delivered on time?</h3><p>Compared with the delivery date promised to the customer.</p></div></div>
+      <div class="stack" id="onTime"></div>
+      <div class="legend">
+        <span><i class="sw" style="background:var(--good)"></i>On time or early <b>91.9%</b> (89,134 orders)</span>
+        <span><i class="sw" style="background:var(--bad)"></i>Late <b>8.1%</b> (7,865 orders)</span>
+      </div>
+      <p class="note">Most orders arrive roughly 10 to 15 days before the promised date.</p>
+    </div>
+    <div class="grid2">
+      <div class="card" id="cLate">
+        <div class="chead">
+          <div><h3>Average review score by delivery</h3><p>Out of 5 stars. The dashed line is the overall average.</p></div>
+          <div class="seg" data-view role="group" aria-label="View">
+            <button data-v="chart" aria-pressed="true">Chart</button>
+            <button data-v="table" aria-pressed="false">Table</button>
+          </div>
+        </div>
+        <div class="chartbox" id="lateChart"></div>
+        <div class="tablebox" id="lateTable"></div>
+        <p class="note">A very late order scores <b>2.5 stars lower</b> than an on-time one (1.70 against 4.24).</p>
+      </div>
+      <div class="card" id="cRev">
+        <div class="chead">
+          <div><h3>How customers rate their orders</h3><p>Number of reviews for each star rating.</p></div>
+          <div class="seg" data-view role="group" aria-label="View">
+            <button data-v="chart" aria-pressed="true">Chart</button>
+            <button data-v="table" aria-pressed="false">Table</button>
+          </div>
+        </div>
+        <div class="chartbox" id="revChart"></div>
+        <div class="tablebox" id="revTable"></div>
+        <div class="legend" id="revLegend"></div>
+        <p class="note">More 1-star than 2-star reviews shows that unhappy customers tend to be very unhappy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="payments">
+  <span class="tag">Payments</span>
+  <h2>Credit cards carry most of the money, usually paid in installments</h2>
+  <p class="sec-p">Pick a measure to compare how customers pay.</p>
+  <div class="card" id="cPay">
+    <div class="chead">
+      <div><h3>Payment methods</h3><p id="paySub"></p></div>
+      <div class="ctrls">
+        <div class="seg" id="segPay" role="group" aria-label="Measure">
+          <button data-v="share" aria-pressed="true">Share of payments</button>
+          <button data-v="rev" aria-pressed="false">Revenue</button>
+          <button data-v="inst" aria-pressed="false">Installments</button>
+        </div>
+        <div class="seg" data-view role="group" aria-label="View">
+          <button data-v="chart" aria-pressed="true">Chart</button>
+          <button data-v="table" aria-pressed="false">Table</button>
+        </div>
+      </div>
+    </div>
+    <div class="chartbox"><div class="blist" id="payList"></div></div>
+    <div class="tablebox" id="payTable"></div>
+    <p class="note" id="payNote"></p>
+    <p class="note" style="font-size:13px;color:var(--muted)">Payments with no defined method are under 0.1% and are not shown. Totals by method come from the payments data and do not add up exactly to the order revenue figure.</p>
+  </div>
+</section>
+
+<section id="next">
+  <span class="tag">Where to look next</span>
+  <h2>Five places the charts point to</h2>
+  <p class="sec-p">These are ideas to test, based on what the numbers show. They are not proven causes.</p>
+  <div class="ideas">
+    <div class="idea"><span class="tag">Customers</span><h3>Bring buyers back</h3><p>97% never ordered again, so even a small rise in repeat buying adds real revenue. Follow-up offers and loyalty rewards are worth trying.</p></div>
+    <div class="idea"><span class="tag">Delivery</span><h3>Keep delivery promises</h3><p>Late orders are only 8% of the total, but their ratings are far lower. Set delivery estimates the business can meet.</p></div>
+    <div class="idea"><span class="tag">Products</span><h3>Favor high-value categories</h3><p>Watches and Gifts earns R$214 per order. Bed, Bath and Table earns R$110. Promoting larger baskets could lift revenue faster than adding orders.</p></div>
+    <div class="idea"><span class="tag">Geography</span><h3>Look beyond three states</h3><p>São Paulo, Rio de Janeiro and Minas Gerais hold about 71% of customers. Other states are a smaller base with room to grow.</p></div>
+    <div class="idea"><span class="tag">Growth</span><h3>Find the next growth driver</h3><p>Revenue has stayed near R$1.0M to R$1.1M a month since late 2017. Reaching new levels likely needs something beyond current momentum.</p></div>
+  </div>
+</section>
+
+<footer>
+  Figures come from the Olist e-commerce project analysis charts. Monthly revenue, orders, category orders and state counts were read off those charts, so they can differ slightly from the exact data. Headline totals (revenue, orders, customers, on-time rate, payment shares) are as reported in the project's executive summary.
+</footer>
+</main>
+
+<div class="tip" id="tip" role="tooltip"></div>
+<div class="sr" id="live" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var nf=function(n){return Math.round(n).toLocaleString('en-US')};
+var trim=function(s){return s.replace(/\.0+$/,'').replace(/(\.\d*?)0+$/,'$1')};
+var money=function(k,d){d=d==null?2:d;return k>=1000?'R$ '+trim((k/1000).toFixed(d))+'M':'R$ '+nf(k)+'K'};
+var rs=function(v){return 'R$ '+nf(v)};
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- data (read from the project charts) ---------- */
+var MONTHS=[[2017,1,127,750],[2017,2,272,1650],[2017,3,414,2550],[2017,4,390,2300],[2017,5,566,3550],[2017,6,490,3130],[2017,7,566,3870],[2017,8,645,4200],[2017,9,702,4160],[2017,10,751,4480],[2017,11,1153,7290],[2017,12,844,5520],[2018,1,1078,7070],[2018,2,966,6550],[2018,3,1120,7000],[2018,4,1133,6780],[2018,5,1129,6720],[2018,6,1013,6100],[2018,7,1027,6150],[2018,8,985,6350]];
+var run=48;
+var ALL=MONTHS.map(function(m,i){run+=m[2];return {i:i,y:m[0],m:m[1],rev:m[2],ord:m[3],cum:run,label:MON[m[1]-1]+' '+m[0],short:MON[m[1]-1]+" '"+String(m[0]).slice(2)}});
+
+var CATS=[
+ {en:'Health & Beauty',pt:'beleza_saude',rev:1258,ord:8830},
+ {en:'Watches & Gifts',pt:'relogios_presentes',rev:1205,ord:5620},
+ {en:'Bed, Bath & Table',pt:'cama_mesa_banho',rev:1037,ord:9420},
+ {en:'Sports & Leisure',pt:'esporte_lazer',rev:988,ord:7720},
+ {en:'Computer Accessories',pt:'informatica_acessorios',rev:911,ord:6690},
+ {en:'Furniture & Decor',pt:'moveis_decoracao',rev:729,ord:6450},
+ {en:'Cool Stuff',pt:'cool_stuff',rev:635,ord:3640},
+ {en:'Housewares',pt:'utilidades_domesticas',rev:632,ord:5880},
+ {en:'Auto',pt:'automotivo',rev:592,ord:3900},
+ {en:'Garden Tools',pt:'ferramentas_jardim',rev:485,ord:3520},
+ {en:'Toys',pt:'brinquedos',rev:483,ord:3890},
+ {en:'Baby',pt:'bebes',rev:411,ord:2880},
+ {en:'Perfumery',pt:'perfumaria',rev:399,ord:3170},
+ {en:'Telephony',pt:'telefonia',rev:323,ord:4200},
+ {en:'Office Furniture',pt:'moveis_escritorio',rev:273,ord:1280}
+];
+CATS.forEach(function(c){c.aov=c.rev*1000/c.ord});
+var TOTAL_REV=15490, TOTAL_CUST=93358;
+
+var STATES=[
+ {c:'SP',n:'São Paulo',v:41700},{c:'RJ',n:'Rio de Janeiro',v:12800},{c:'MG',n:'Minas Gerais',v:11600},
+ {c:'RS',n:'Rio Grande do Sul',v:5400},{c:'PR',n:'Paraná',v:5000},{c:'SC',n:'Santa Catarina',v:3600},
+ {c:'BA',n:'Bahia',v:3300},{c:'DF',n:'Distrito Federal',v:2100},{c:'ES',n:'Espírito Santo',v:2000},{c:'GO',n:'Goiás',v:2000}
+];
+
+var DELIV=[
+ {k:'Very early',v:4.32,cls:'c-good',txt:'Arrived well before the promised date'},
+ {k:'On time',v:4.24,cls:'c-good',txt:'Arrived on or just before the promised date'},
+ {k:'Slightly late',v:2.92,cls:'c-warn',txt:'Arrived a little after the promised date'},
+ {k:'Very late',v:1.70,cls:'c-bad',txt:'Arrived long after the promised date'}
+];
+var REVIEWS=[[1,9400],[2,3000],[3,8000],[4,19000],[5,57000]];
+var REV_TOTAL=REVIEWS.reduce(function(a,r){return a+r[1]},0);
+var PAY=[
+ {k:'credit_card',label:'Credit card',share:73.9,rev:12.5,inst:3.5},
+ {k:'boleto',label:'Boleto (bank slip)',share:19.0,rev:2.9,inst:1.0},
+ {k:'voucher',label:'Voucher',share:5.6,rev:0.4,inst:1.0},
+ {k:'debit_card',label:'Debit card',share:1.5,rev:0.2,inst:1.0}
+];
+
+/* ---------- tooltip ---------- */
+var tipEl=$('#tip');
+function tipBox(o){
+  return '<div class="t-title">'+o.title+'</div>'+(o.sub?'<div class="t-sub">'+o.sub+'</div>':'')+(o.big?'<div class="t-big">'+o.big+'</div>':'')+
+    (o.rows||[]).map(function(r){return '<div class="t-row"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>'}).join('')+(o.note?'<div class="t-note">'+o.note+'</div>':'');
+}
+function placeTip(cx,cy){
+  var w=tipEl.offsetWidth,h=tipEl.offsetHeight,vw=document.documentElement.clientWidth;
+  var x=cx-w/2,y=cy-h-14;
+  if(x<8)x=8; if(x+w>vw-8)x=vw-8-w; if(y<8)y=cy+18;
+  tipEl.style.transform='translate('+Math.round(x)+'px,'+Math.round(y)+'px)';
+}
+function showTip(html,cx,cy){tipEl.innerHTML=html;tipEl.classList.add('show');placeTip(cx,cy)}
+function hideTip(){tipEl.classList.remove('show')}
+function bindTip(n,fn){
+  n.classList.add('tipbind');
+  n.addEventListener('pointerenter',function(e){showTip(fn(),e.clientX,e.clientY)});
+  n.addEventListener('pointermove',function(e){if(tipEl.classList.contains('show'))placeTip(e.clientX,e.clientY)});
+  n.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse')hideTip()});
+  n.addEventListener('focus',function(){var r=n.getBoundingClientRect();showTip(fn(),r.left+Math.min(r.width/2,160),r.top)});
+  n.addEventListener('blur',hideTip);
+}
+document.addEventListener('pointerdown',function(e){if(!e.target.closest('.tipbind,svg.trend'))hideTip()});
+window.addEventListener('scroll',hideTip,{passive:true});
+
+/* ---------- helpers ---------- */
+function grow(box){
+  var f=$$('.bfill,.vbar',box);
+  requestAnimationFrame(function(){requestAnimationFrame(function(){
+    f.forEach(function(n){if(n.dataset.w)n.style.width=n.dataset.w;if(n.dataset.h)n.style.height=n.dataset.h});
+  })});
+}
+function renderBars(box,rows,o){
+  var max=o.max||Math.max.apply(null,rows.map(function(r){return r.v}));
+  box.setAttribute('role','list');
+  box.innerHTML=rows.map(function(r,i){
+    return '<div class="brow'+(r.dim?' dim':'')+'" tabindex="0" role="listitem"><div class="blabel">'+r.label+'</div><div class="btrack"><div class="bfill" data-w="'+(r.v/max*100)+'%"></div></div><div class="bval">'+o.fmt(r.v)+'</div></div>';
+  }).join('');
+  $$('.brow',box).forEach(function(n,i){bindTip(n,function(){return o.tip(rows[i])})});
+  grow(box);
+}
+function renderV(box,items,o){
+  box.innerHTML='<div class="vplot"><div class="vinner">'+
+    (o.ref!=null?'<div class="vref" style="bottom:'+(o.ref/o.max*100)+'%"><span>'+o.refLabel+'</span></div>':'')+
+    items.map(function(it){return '<div class="vcol" tabindex="0"><span class="vval">'+it.val+'</span><div class="vbar '+it.cls+'" data-h="'+(it.v/o.max*100)+'%"></div></div>'}).join('')+
+    '</div><div class="vlabels">'+items.map(function(it){return '<span>'+it.label+(it.sub?'<small>'+it.sub+'</small>':'')+'</span>'}).join('')+'</div></div>';
+  $$('.vcol',box).forEach(function(n,i){bindTip(n,function(){return o.tip(items[i])})});
+  grow(box);
+}
+function fillTable(id,head,rows){
+  $(id).innerHTML='<table><thead><tr>'+head.map(function(h){return '<th>'+h+'</th>'}).join('')+'</tr></thead><tbody>'+
+    rows.map(function(r){return '<tr>'+r.map(function(c){return '<td>'+c+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table>';
+}
+function seg(el,cb){
+  $$('button',el).forEach(function(b){b.addEventListener('click',function(){
+    $$('button',el).forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
+    cb(b.dataset.v);
+  })});
+}
+function niceTicks(max,n){
+  var raw=max/n,p=Math.pow(10,Math.floor(Math.log10(raw))),f=raw/p;
+  var step=(f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*p;
+  var top=Math.ceil(max/step-1e-9)*step,t=[];
+  for(var v=0;v<=top+1e-9;v+=step)t.push(v);
+  return t;
+}
+function chg(v,pv){
+  var p=(v/pv-1)*100;
+  return (p>=0?'<span class="t-up">▲ ':'<span class="t-down">▼ ')+Math.abs(Math.round(p))+'%</span>';
+}
+
+/* view toggles (chart / table) */
+$$('[data-view]').forEach(function(s){seg(s,function(v){s.closest('.card').classList.toggle('as-table',v==='table')})});
+
+/* ---------- 1. trend ---------- */
+var T={metric:'rev',range:'all',rows:[],idx:-1};
+var NAMES={rev:'Revenue per month',ord:'Orders per month',cum:'Running total of revenue'};
+var SUBS={rev:'In Brazilian reais (R$). Hover or use the arrow keys.',ord:'Number of orders placed. Hover or use the arrow keys.',cum:'All revenue earned so far, in R$. Hover or use the arrow keys.'};
+function trendRows(){
+  var rows=T.range==='all'?ALL:ALL.filter(function(d){return String(d.y)===T.range});
+  return rows.map(function(d){var o=Object.assign({},d);o.v=T.metric==='rev'?d.rev:T.metric==='ord'?d.ord:d.cum;return o});
+}
+function trendTip(d){
+  var prev=ALL[d.i-1];
+  if(T.metric==='cum')return tipBox({title:d.label,sub:'Running total',big:money(d.cum),note:'+'+money(d.rev)+' added this month'});
+  var pv=prev?(T.metric==='rev'?prev.rev:prev.ord):null;
+  var big=T.metric==='rev'?money(d.rev):nf(d.ord);
+  var other=T.metric==='rev'?['Orders',nf(d.ord)]:['Revenue',money(d.rev)];
+  return tipBox({title:d.label,sub:T.metric==='rev'?'Revenue':'Orders',big:big,rows:[other],note:pv?chg(T.metric==='rev'?d.rev:d.ord,pv)+' vs '+MON[prev.m-1]:'First month shown'});
+}
+function trendStats(rows){
+  var s=[];
+  if(T.metric==='cum'){
+    var last=rows[rows.length-1];
+    s=[['Total by '+last.short,money(last.cum)],['Added per month, on average',money(rows.reduce(function(a,r){return a+r.rev},0)/rows.length)],['Months shown',String(rows.length)]];
+  }else{
+    var f=function(r){return T.metric==='rev'?r.rev:r.ord},fm=function(v){return T.metric==='rev'?money(v):nf(v)};
+    var best=rows.reduce(function(a,r){return f(r)>f(a)?r:a});
+    var avg=rows.reduce(function(a,r){return a+f(r)},0)/rows.length;
+    var ch=(f(rows[rows.length-1])/f(rows[0])-1)*100;
+    s=[['Best month',best.label+' · '+fm(f(best))],['Average per month',fm(avg)],[rows[0].short+' to '+rows[rows.length-1].short,(ch>=0?'+':'')+Math.round(ch)+'%']];
+  }
+  $('#trendStats').innerHTML=s.map(function(x){return '<div class="stat"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>'}).join('');
+  var notes={
+    rev:'<b>November 2017</b> was the peak at R$1.15M, up 53% on October, probably helped by Black Friday. After that, revenue settled around R$1.0M to R$1.1M a month.',
+    ord:'Orders follow the same shape as revenue: about 7,300 in November 2017, then steady at 6,000 to 7,000 a month.',
+    cum:'The line rises steadily because roughly R$1M is added every month. It passed R$15M by August 2018.'
+  };
+  $('#trendNote').innerHTML=notes[T.metric];
+  fillTable('#trendTable',['Month','Revenue','Orders','Running total'],rows.map(function(r){return [r.label,money(r.rev),nf(r.ord),money(r.cum)]}));
+}
+function drawTrend(){
+  var box=$('#trendChart');
+  var rows=trendRows();T.rows=rows;
+  var W=Math.max(300,Math.floor(box.clientWidth)),H=W<560?250:330;
+  var mg={t:28,r:22,b:32,l:W<560?44:54};
+  var iw=W-mg.l-mg.r,ih=H-mg.t-mg.b;
+  var vals=rows.map(function(r){return r.v});
+  var max=Math.max.apply(null,vals),ticks=niceTicks(max,5),top=ticks[ticks.length-1];
+  var X=function(i){return mg.l+(rows.length>1?i*iw/(rows.length-1):iw/2)};
+  var Y=function(v){return mg.t+ih-v/top*ih};
+  var tk=function(v){if(v===0)return '0';if(T.metric==='ord')return v>=1000?trim((v/1000).toFixed(1))+'K':String(v);return v>=1000?trim((v/1000).toFixed(2))+'M':v+'K'};
+  var s='<svg class="trend" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" role="img" tabindex="0" aria-label="'+NAMES[T.metric]+', '+rows[0].label+' to '+rows[rows.length-1].label+'. Use left and right arrow keys to read each month.">';
+  ticks.forEach(function(t){var y=Y(t);s+='<line x1="'+mg.l+'" x2="'+(W-mg.r)+'" y1="'+y+'" y2="'+y+'" class="'+(t===0?'axis':'grid')+'"/><text x="'+(mg.l-8)+'" y="'+(y+4)+'" text-anchor="end" class="ylab">'+tk(t)+'</text>'});
+  var step=Math.max(1,Math.ceil(rows.length/Math.max(2,Math.floor(iw/62))));
+  rows.forEach(function(r,i){if(i%step===0)s+='<text x="'+X(i)+'" y="'+(H-10)+'" text-anchor="middle" class="xlab">'+r.short+'</text>'});
+  var pts=rows.map(function(r,i){return [X(i),Y(r.v)]});
+  var line='M'+pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1)}).join('L');
+  s+='<path d="'+line+'L'+X(rows.length-1)+','+Y(0)+'L'+X(0)+','+Y(0)+'Z" class="area"/><path d="'+line+'" class="line"/>';
+  pts.forEach(function(p){s+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3" class="dot"/>'});
+  if(T.metric!=='cum'){
+    var pi=vals.indexOf(max),pp=pts[pi],anc=pp[0]>W-90?'end':(pp[0]<mg.l+50?'start':'middle');
+    s+='<circle cx="'+pp[0]+'" cy="'+pp[1]+'" r="5.5" class="peak"/><text x="'+pp[0]+'" y="'+(pp[1]-12)+'" text-anchor="'+anc+'" class="annot">Peak: '+(T.metric==='rev'?money(max):nf(max))+'</text>';
+  }else{
+    var lp=pts[pts.length-1];
+    s+='<circle cx="'+lp[0]+'" cy="'+lp[1]+'" r="5.5" class="peak"/><text x="'+lp[0]+'" y="'+(lp[1]-12)+'" text-anchor="end" class="annot">'+money(vals[vals.length-1])+'</text>';
+  }
+  s+='<line id="xh" class="xh" y1="'+mg.t+'" y2="'+(mg.t+ih)+'" x1="0" x2="0" visibility="hidden"/><circle id="hd" r="6.5" class="hdot" cx="0" cy="0" visibility="hidden"/>';
+  s+='<rect id="ov" x="0" y="0" width="'+W+'" height="'+H+'" fill="transparent" style="touch-action:pan-y"/></svg>';
+  box.innerHTML=s;
+  var svg=$('svg',box),xh=$('#xh'),hd=$('#hd'),ov=$('#ov');
+  function clear(){xh.setAttribute('visibility','hidden');hd.setAttribute('visibility','hidden');hideTip();T.idx=-1}
+  function setIdx(i,silent){
+    i=Math.max(0,Math.min(rows.length-1,i));T.idx=i;var p=pts[i];
+    xh.setAttribute('x1',p[0]);xh.setAttribute('x2',p[0]);xh.setAttribute('visibility','visible');
+    hd.setAttribute('cx',p[0]);hd.setAttribute('cy',p[1]);hd.setAttribute('visibility','visible');
+    var r=svg.getBoundingClientRect(),k=r.width/W;
+    showTip(trendTip(rows[i]),r.left+p[0]*k,r.top+p[1]*k);
+    if(!silent)$('#live').textContent=rows[i].label+': '+(T.metric==='ord'?nf(rows[i].v)+' orders':money(rows[i].v));
+  }
+  function fromEvent(e){var r=svg.getBoundingClientRect();var px=(e.clientX-r.left)*(W/r.width);setIdx(Math.round((px-mg.l)/iw*(rows.length-1)),true)}
+  ov.addEventListener('pointermove',fromEvent);
+  ov.addEventListener('pointerdown',fromEvent);
+  ov.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse')clear()});
+  svg.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='ArrowLeft'||e.key==='Home'||e.key==='End'){
+      e.preventDefault();
+      var n=e.key==='Home'?0:e.key==='End'?rows.length-1:(T.idx<0?rows.length-1:T.idx+(e.key==='ArrowRight'?1:-1));
+      setIdx(n);
+    }else if(e.key==='Escape')clear();
+  });
+  svg.addEventListener('blur',clear);
+  trendStats(rows);
+  $('#trendTitle').textContent=NAMES[T.metric];$('#trendSub').textContent=SUBS[T.metric];
+}
+seg($('#segMetric'),function(v){T.metric=v;drawTrend()});
+seg($('#segRange'),function(v){T.range=v;drawTrend()});
+var lastW=0,raf=0;
+if(window.ResizeObserver){
+  new ResizeObserver(function(){
+    var w=Math.floor($('#trendChart').clientWidth);
+    if(w!==lastW){lastW=w;cancelAnimationFrame(raf);raf=requestAnimationFrame(drawTrend)}
+  }).observe($('#trendChart'));
+}
+drawTrend();
+
+/* ---------- 2. categories ---------- */
+var catMode='rev';
+function drawCats(){
+  var key=catMode;
+  var rows=CATS.slice().sort(function(a,b){return b[key]-a[key]}).map(function(c,i){return {label:c.en,v:c[key],c:c,dim:key==='rev'&&i>=5}});
+  var fm={rev:function(v){return money(v)},ord:function(v){return '~'+trim((v/1000).toFixed(1))+'K'},aov:function(v){return rs(v)}}[key];
+  renderBars($('#catList'),rows,{fmt:fm,tip:function(r){var c=r.c;return tipBox({title:c.en,sub:c.pt,big:money(c.rev),rows:[['Share of revenue',(c.rev/TOTAL_REV*100).toFixed(1)+'%'],['Orders','~'+nf(c.ord)],['Revenue per order',rs(c.aov)]]})}});
+  var top5=CATS.slice(0,5).reduce(function(a,c){return a+c.rev},0)/TOTAL_REV*100;
+  var byAov=CATS.slice().sort(function(a,b){return b.aov-a.aov}),byOrd=CATS.slice().sort(function(a,b){return b.ord-a.ord});
+  var sub={rev:'Total revenue per category. Hover a bar for details.',ord:'Approximate number of orders per category.',aov:'Average revenue per order, in R$.'};
+  $('#catSub').textContent=sub[key];
+  var notes={
+    rev:'The top 5 (solid bars) bring in about <b>'+Math.round(top5)+'%</b> of all revenue. Health & Beauty leads at '+money(CATS[0].rev)+'.',
+    ord:'<b>'+byOrd[0].en+'</b> has the most orders (about '+nf(byOrd[0].ord)+') but ranks third on revenue. <b>'+CATS[1].en+'</b> ranks second on revenue with far fewer orders (about '+nf(CATS[1].ord)+').',
+    aov:'<b>'+byAov[0].en+'</b> averages '+rs(byAov[0].aov)+' per order, while <b>'+byAov[byAov.length-1].en+'</b> averages only '+rs(byAov[byAov.length-1].aov)+'. A few big orders can earn more than many small ones.'
+  };
+  $('#catNote').innerHTML=notes[key];
+  fillTable('#catTable',['Category','Revenue','Orders (approx.)','Revenue per order'],rows.map(function(r){return [r.c.en+' <span style="color:var(--muted)">('+r.c.pt+')</span>',money(r.c.rev),nf(r.c.ord),rs(r.c.aov)]}));
+}
+seg($('#segCat'),function(v){catMode=v;drawCats()});
+drawCats();
+
+/* ---------- 3. customers ---------- */
+(function(){
+  var w=$('#waffle'),h='';
+  for(var i=0;i<100;i++){
+    var rep=i>=97;
+    h+='<span class="wcell '+(rep?'rep':'one')+'"'+((i===0||i===97)?' tabindex="0"':'')+'></span>';
+  }
+  w.innerHTML=h;
+  $$('.wcell',w).forEach(function(n){
+    var rep=n.classList.contains('rep');
+    bindTip(n,function(){
+      return rep?tipBox({title:'Came back to buy again',big:'3.2%',rows:[['Bought twice','2.9%'],['Three or more times','0.3%']]})
+                :tipBox({title:'Bought only once',big:'96.9%',note:'These customers never placed a second order.'});
+    });
+  });
+})();
+function drawStates(){
+  var rows=STATES.map(function(s){return {label:s.n+' <span style="color:var(--muted)">('+s.c+')</span>',v:s.v,s:s}});
+  renderBars($('#stateList'),rows,{fmt:function(v){return '~'+trim((v/1000).toFixed(1))+'K'},tip:function(r){var s=r.s;return tipBox({title:s.n,sub:s.c,big:'~'+nf(s.v),rows:[['Share of all customers',(s.v/TOTAL_CUST*100).toFixed(1)+'%']],note:'customers (estimate)'})}});
+  var top3=STATES.slice(0,3).reduce(function(a,s){return a+s.v},0)/TOTAL_CUST*100;
+  $('#stateNote').innerHTML='São Paulo, Rio de Janeiro and Minas Gerais together hold about <b>'+Math.round(top3)+'%</b> of customers. São Paulo alone has about '+Math.round(STATES[0].v/TOTAL_CUST*100)+'%.';
+  fillTable('#stateTable',['State','Customers (approx.)','Share of all customers'],STATES.map(function(s){return [s.n+' ('+s.c+')',nf(s.v),(s.v/TOTAL_CUST*100).toFixed(1)+'%']}));
+}
+drawStates();
+
+/* ---------- 4. delivery & reviews ---------- */
+(function(){
+  var st=$('#onTime');
+  st.setAttribute('role','img');st.setAttribute('aria-label','91.9% of orders on time or early, 8.1% late');
+  st.innerHTML='<div style="width:91.9%;background:var(--good)"></div><div style="width:8.1%;background:var(--bad)"></div>';
+  var a=st.children;
+  bindTip(a[0],function(){return tipBox({title:'On time or early',big:'91.9%',note:'89,134 orders arrived by the promised date.'})});
+  bindTip(a[1],function(){return tipBox({title:'Late',big:'8.1%',note:'7,865 orders arrived after the promised date.'})});
+})();
+(function(){
+  var overall=REVIEWS.reduce(function(a,r){return a+r[0]*r[1]},0)/REV_TOTAL;
+  var items=DELIV.map(function(d){return {label:d.k,v:d.v,val:d.v.toFixed(2),cls:d.cls,d:d}});
+  renderV($('#lateChart'),items,{max:5,ref:overall,refLabel:'Overall average '+overall.toFixed(2),tip:function(it){
+    var diff=it.v-overall;
+    return tipBox({title:it.d.k,sub:it.d.txt,big:it.v.toFixed(2)+' stars',note:(diff>=0?'+':'−')+Math.abs(diff).toFixed(2)+' compared with the overall average'});
+  }});
+  fillTable('#lateTable',['Delivery','Average review (of 5)'],DELIV.map(function(d){return [d.k,d.v.toFixed(2)]}));
+})();
+(function(){
+  var items=REVIEWS.map(function(r){
+    var cls=r[0]<=2?'c-bad':r[0]===3?'c-neutral':'c-good';
+    return {label:r[0]+(r[0]===1?' star':' stars'),v:r[1],val:trim((r[1]/1000).toFixed(1))+'K',cls:cls,n:r[1],star:r[0]};
+  });
+  renderV($('#revChart'),items,{max:60000,tip:function(it){return tipBox({title:it.star+(it.star===1?' star':' stars'),big:'~'+nf(it.n),rows:[['Share of reviews',(it.n/REV_TOTAL*100).toFixed(1)+'%']],note:'reviews (estimate)'})}});
+  var sh=function(a,b){return REVIEWS.filter(function(r){return r[0]>=a&&r[0]<=b}).reduce(function(s,r){return s+r[1]},0)/REV_TOTAL*100};
+  $('#revLegend').innerHTML=
+    '<span><i class="sw" style="background:var(--good)"></i>Happy (4 to 5 stars) <b>'+sh(4,5).toFixed(1)+'%</b></span>'+
+    '<span><i class="sw" style="background:var(--neutral)"></i>Neutral (3 stars) <b>'+sh(3,3).toFixed(1)+'%</b></span>'+
+    '<span><i class="sw" style="background:var(--bad)"></i>Unhappy (1 to 2 stars) <b>'+sh(1,2).toFixed(1)+'%</b></span>';
+  fillTable('#revTable',['Stars','Reviews (approx.)','Share'],REVIEWS.map(function(r){return [r[0],nf(r[1]),(r[1]/REV_TOTAL*100).toFixed(1)+'%']}));
+})();
+
+/* ---------- 5. payments ---------- */
+var payMode='share';
+function drawPay(){
+  var k=payMode;
+  var rows=PAY.slice().sort(function(a,b){return b[k]-a[k]||b.share-a.share}).map(function(p){return {label:p.label,v:p[k],p:p}});
+  var fm={share:function(v){return v.toFixed(1)+'%'},rev:function(v){return 'R$ '+v.toFixed(1)+'M'},inst:function(v){return v.toFixed(1)}}[k];
+  renderBars($('#payList'),rows,{fmt:fm,tip:function(r){var p=r.p;return tipBox({title:p.label,sub:p.k,big:p.share.toFixed(1)+'%',rows:[['Revenue','R$ '+p.rev.toFixed(1)+'M'],['Average installments',p.inst.toFixed(1)]],note:'of all payments'})}});
+  $('#paySub').textContent={share:'Share of all payments made with each method.',rev:'Revenue paid with each method, in millions of R$.',inst:'Average number of installments the customer chose.'}[k];
+  $('#payNote').innerHTML={
+    share:'Three in four payments use a <b>credit card</b>. Boleto, a Brazilian bank slip paid in cash or online, is a distant second at 19%.',
+    rev:'Credit cards bring in <b>R$12.5M</b>, more than four times as much as boleto (R$2.9M).',
+    inst:'Credit-card buyers split the bill into about <b>3.5 installments</b>. Every other method is paid in one go.'
+  }[k];
+  fillTable('#payTable',['Method','Share of payments','Revenue','Average installments'],PAY.map(function(p){return [p.label,p.share.toFixed(1)+'%','R$ '+p.rev.toFixed(1)+'M',p.inst.toFixed(1)]}));
+}
+seg($('#segPay'),function(v){payMode=v;drawPay()});
+drawPay();
+
+/* ---------- navigation ---------- */
+$$('[data-go]').forEach(function(b){b.addEventListener('click',function(){
+  var t=document.getElementById(b.dataset.go);if(t)t.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+})});
+if(window.IntersectionObserver){
+  var navBtns=$$('.nav button');
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){navBtns.forEach(function(b){b.classList.toggle('on',b.dataset.go===e.target.id)})}});
+  },{rootMargin:'-30% 0px -60% 0px'});
+  $$('main section').forEach(function(s){io.observe(s)});
+}
+})();
+</script>
+
+</body></html>
