@@ -12,10 +12,12 @@
 [![Status](https://img.shields.io/badge/Status-Complete-success.svg?style=for-the-badge)](https://github.com/Ajinkya-Ghuge/Olist-E-Commerce-Marketplace-analysis)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg?style=for-the-badge)](https://github.com/Ajinkya-Ghuge/Olist-E-Commerce-Marketplace-analysis/pulls)
+[![Stars](https://img.shields.io/github/stars/Ajinkya-Ghuge/Olist-E-Commerce-Marketplace-analysis?style=for-the-badge)](https://github.com/Ajinkya-Ghuge/Olist-E-Commerce-Marketplace-analysis/stargazers)
+[![Forks](https://img.shields.io/github/forks/Ajinkya-Ghuge/Olist-E-Commerce-Marketplace-analysis?style=for-the-badge)](https://github.com/Ajinkya-Ghuge/Olist-E-Commerce-Marketplace-analysis/network/members)
 
 ---
 
-### 🎯 [View Live Interactive Dashboard](https://ajinkya-ghuge.github.io/Olist-E-Commerce-Marketplace-analysis/) | 📊 [Explore Analysis](https://github.com/Ajinkya-Ghuge/Olist-E-Commerce-Marketplace-analysis/tree/main/analysis) | 📖 [Read Full Documentation](INTERVIEW_EXPLANATION.md)
+### 🎯 [View Live Interactive Dashboard](https://ajinkya-ghuge.github.io/Olist-E-Commerce-Marketplace-analysis/interactive_dashboard.html) | 📊 [Explore Analysis](https://github.com/Ajinkya-Ghuge/Olist-E-Commerce-Marketplace-analysis/tree/main/analysis) | 📖 [Read Full Documentation](INTERVIEW_EXPLANATION.md)
 
 ---
 
@@ -24,6 +26,14 @@
   <img src="https://img.shields.io/badge/Orders-99,441-blue?style=for-the-badge" alt="Orders"/>
   <img src="https://img.shields.io/badge/Customers-96,096-green?style=for-the-badge" alt="Customers"/>
   <img src="https://img.shields.io/badge/Retention_Issue-96.8%25-red?style=for-the-badge" alt="Retention"/>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/SQL_Queries-10_Advanced-9b59b6?style=flat-square" alt="SQL"/>
+  <img src="https://img.shields.io/badge/Dashboards-6_Professional-1abc9c?style=flat-square" alt="Dashboards"/>
+  <img src="https://img.shields.io/badge/Charts-20+_Visualizations-e67e22?style=flat-square" alt="Charts"/>
+  <img src="https://img.shields.io/badge/Database-66_MB_SQLite-3498db?style=flat-square" alt="Database"/>
+  <img src="https://img.shields.io/badge/Pipeline-Fully_Automated-2ecc71?style=flat-square" alt="Pipeline"/>
 </p>
 
 </div>
@@ -215,29 +225,70 @@ run_all.bat
 
 <div align="center">
 
-### 📈 Revenue Performance Dashboard
+### 🎨 Dashboard Gallery
 
-*Monthly revenue trends showing R$ 15.9M analyzed across 23 months*
+<table>
+<tr>
+<td width="50%">
 
-### 🍩 Customer Frequency Analysis
+#### 📈 Revenue Performance Dashboard
+![Revenue Dashboard](reports/charts/01_revenue_dashboard.png)
+*Monthly trends, growth rates, and cumulative revenue*
 
-*Reveals the critical 96.8% one-time buyer retention issue*
+</td>
+<td width="50%">
 
-### 📦 Product Category Performance
+#### 📦 Category Analysis
+![Category Analysis](reports/charts/02_category_analysis.png)
+*Top 15 categories and revenue vs volume analysis*
 
-*Top 10 categories generating over R$ 10M in combined revenue*
+</td>
+</tr>
+<tr>
+<td width="50%">
 
-### 🚚 Delivery Performance by State
+#### 👥 Customer Behavior
+![Customer Behavior](reports/charts/03_customer_behavior.png)
+*Purchase frequency, segmentation, and geography*
 
-*Multi-axis chart combining order volume with late delivery percentages*
+</td>
+<td width="50%">
 
-### 💳 Payment Method Distribution
+#### 🚚 Delivery Performance
+![Delivery Performance](reports/charts/04_delivery_performance.png)
+*Delay analysis and satisfaction correlation*
 
-*Credit cards dominate at 74% of transactions (R$ 12.5M)*
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+#### 💳 Payment Analysis
+![Payment Analysis](reports/charts/05_payment_analysis.png)
+*Methods, revenue distribution, installments*
+
+</td>
+<td width="50%">
+
+#### 📊 Executive Dashboard
+![Executive Dashboard](reports/charts/06_executive_dashboard.png)
+*All key metrics in one comprehensive view*
+
+</td>
+</tr>
+</table>
+
+### 🌐 Interactive Features Demo
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Hover-Interactive_Tooltips-7c3aed?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Click-Filter_Data-3498db?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Zoom-Detailed_View-2ecc71?style=for-the-badge" />
+</p>
 
 </div>
 
-> **💡 Pro Tip:** The interactive dashboard allows you to hover over any chart for detailed insights!
+> **💡 Pro Tip:** Click any chart above to see full resolution. Visit the [Live Interactive Dashboard](https://ajinkya-ghuge.github.io/Olist-E-Commerce-Marketplace-analysis/interactive_dashboard.html) to hover over data points for real-time insights!
 
 ---
 
@@ -290,21 +341,28 @@ Olist-E-Commerce-Marketplace-analysis/
 ## 💡 Analysis Workflow
 
 ```mermaid
-graph LR
-    A[Raw Data<br/>9 CSV Files] --> B[Data Profiling<br/>Quality Check]
-    B --> C[Data Cleaning<br/>ETL Pipeline]
-    C --> D[Business Analysis<br/>KPI Calculation]
-    D --> E[SQL Analysis<br/>Advanced Queries]
-    E --> F[Visualizations<br/>6 Dashboards]
-    F --> G[Interactive Dashboard<br/>Chart.js]
+graph TB
+    A[📁 Raw Data<br/>9 CSV Files<br/>550K+ Records] --> B[🔍 Phase 1: Data Profiling<br/>Quality Assessment<br/>Missing Values Analysis]
+    B --> C[🧹 Phase 2: Data Cleaning<br/>ETL Pipeline<br/>Feature Engineering]
+    C --> D[📊 Phase 3: Business Analysis<br/>KPI Calculation<br/>Customer Segmentation]
+    D --> E[🗄️ Phase 4: SQL Analysis<br/>SQLite Database<br/>10 Advanced Queries]
+    E --> F[📈 Phase 5: Visualizations<br/>Matplotlib & Seaborn<br/>6 Professional Dashboards]
+    F --> G[🌐 Phase 6: Interactive Dashboard<br/>Chart.js Integration<br/>Real-time Hover Effects]
     
-    style A fill:#e74c3c
-    style B fill:#3498db
-    style C fill:#2ecc71
-    style D fill:#f39c12
-    style E fill:#9b59b6
-    style F fill:#1abc9c
-    style G fill:#e67e22
+    B -.->|Reports| H[📄 data_quality_issues.csv]
+    C -.->|Output| I[💾 master_orders.csv<br/>99K rows]
+    D -.->|Insights| J[📋 business_insights.txt]
+    E -.->|Database| K[🗄️ olist_analytics.db<br/>66 MB]
+    F -.->|Charts| L[🖼️ 6 PNG Dashboards<br/>300 DPI]
+    G -.->|Live| M[🌐 GitHub Pages<br/>Interactive Demo]
+    
+    style A fill:#e74c3c,stroke:#c0392b,stroke-width:3px,color:#fff
+    style B fill:#3498db,stroke:#2980b9,stroke-width:3px,color:#fff
+    style C fill:#2ecc71,stroke:#27ae60,stroke-width:3px,color:#fff
+    style D fill:#f39c12,stroke:#d68910,stroke-width:3px,color:#fff
+    style E fill:#9b59b6,stroke:#8e44ad,stroke-width:3px,color:#fff
+    style F fill:#1abc9c,stroke:#16a085,stroke-width:3px,color:#fff
+    style G fill:#e67e22,stroke:#d35400,stroke-width:3px,color:#fff
 ```
 
 ### Phase-by-Phase Breakdown
@@ -317,6 +375,92 @@ graph LR
 | **4. SQL** | `04_sql_analysis.py` | 10 advanced queries, database creation | `olist_analytics.db` (66 MB) |
 | **5. Visualization** | `05_visualizations.py` | 20+ professional charts | 6 PNG dashboards |
 | **6. Dashboard** | `interactive_dashboard.html` | Interactive web interface | Chart.js dashboard |
+
+---
+
+## 📊 Visual Data Insights
+
+<div align="center">
+
+### 📈 Revenue by Top Categories
+
+```mermaid
+%%{init: {'theme':'dark'}}%%
+pie title Revenue Distribution (R$ Thousands)
+    "Beleza/Saude" : 1258.7
+    "Relogios/Presentes" : 1205.0
+    "Cama/Mesa/Banho" : 1037.0
+    "Esporte/Lazer" : 988.0
+    "Others" : 11427
+```
+
+### 🔄 Customer Purchase Behavior
+
+```mermaid
+%%{init: {'theme':'dark'}}%%
+pie title Customer Segmentation (96.8% One-Time Crisis!)
+    "One-time Buyers" : 96.8
+    "Two-time Buyers" : 2.9
+    "Loyal (3+)" : 0.3
+```
+
+### 🚚 Delivery Performance by Top States
+
+```mermaid
+%%{init: {'theme':'dark'}}%%
+graph LR
+    A[🇧🇷 Brazil<br/>99,441 Orders] --> B[SP: 40,494<br/>5.89% Late]
+    A --> C[RJ: 12,350<br/>13.47% Late ⚠️]
+    A --> D[MG: 11,354<br/>5.61% Late]
+    A --> E[RS: 5,344<br/>7.15% Late]
+    
+    style A fill:#f39c12,stroke:#d68910,stroke-width:3px,color:#fff
+    style B fill:#2ecc71,stroke:#27ae60,stroke-width:2px,color:#fff
+    style C fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff
+    style D fill:#3498db,stroke:#2980b9,stroke-width:2px,color:#fff
+    style E fill:#9b59b6,stroke:#8e44ad,stroke-width:2px,color:#fff
+```
+
+</div>
+
+### 📊 Key Metrics Progress
+
+<table width="100%">
+<tr><td>
+
+**💰 Revenue Achievement**  
+![Revenue](https://progress-bar.dev/100/?title=R$_15.9M_Analyzed&width=500&color=7c3aed)
+
+**⭐ Customer Satisfaction**  
+![Satisfaction](https://progress-bar.dev/83/?title=4.16/5.0_Stars_(83%)&width=500&color=2ecc71)
+
+**🔄 Repeat Customer Rate** ⚠️  
+![Retention](https://progress-bar.dev/3/?title=Only_3.2%_Return&width=500&color=e74c3c)
+
+**📦 On-Time Delivery**  
+![Delivery](https://progress-bar.dev/93/?title=93.2%_On-Time&width=500&color=3498db)
+
+**💳 Payment Reconciliation**  
+![Payment](https://progress-bar.dev/100/?title=99.6%_Match_Rate&width=500&color=27ae60)
+
+</td></tr>
+</table>
+
+### 📈 Monthly Revenue Trend (ASCII Chart)
+
+```
+R$ (Thousands)
+1200 |                    ●●●
+1000 |               ●●●  ││││  ●●●●●
+ 800 |           ●●●││││││││││││││││││
+ 600 |       ●●●││││││││││││││││││││││
+ 400 |   ●●●││││││││││││││││││││││││││
+ 200 | ●●││││││││││││││││││││││││││││││
+   0 |─┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴┴
+     Sep'16    2017 Timeline    Aug'18
+     
+● Peak: Nov 2017 (R$ 1,153K - Black Friday Effect!)
+```
 
 ---
 
