@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olist E-Commerce Analytics Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d1b4e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 16px;
+            border: 2px solid rgba(124, 58, 237, 0.3);
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #7c3aed, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #a0a0b0;
+        }
+
+        .kpi-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            background: rgba(124, 58, 237, 0.15);
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid rgba(124, 58, 237, 0.3);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
+        }
+
+        .kpi-label {
+            font-size: 0.9em;
+            color: #a0a0b0;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .kpi-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #a855f7;
+        }
+
+        .insights-section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(168, 85, 247, 0.1);
+            border-radius: 16px;
+            border: 2px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .insights-section h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #a855f7;
+        }
+
+        .insight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .insight-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #a855f7;
+        }
+
+        .insight-card h3 {
+            color: #7c3aed;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .insight-card p {
+            color: #d0d0d0;
+            line-height: 1.6;
+        }
+
+        .dashboard-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            background: rgba(124, 58, 237, 0.2);
+            border: 2px solid rgba(124, 58, 237, 0.5);
+            border-radius: 8px;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button:hover {
+            background: rgba(124, 58, 237, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active {
+            background: #7c3aed;
+            border-color: #a855f7;
+        }
+
+        .chart-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .chart-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 30px;
+        }
+
+        .chart-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid rgba(124, 58, 237, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(124, 58, 237, 0.3);
+        }
+
+        .chart-card h3 {
+            color: #a855f7;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .chart-card img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid rgba(124, 58, 237, 0.2);
+        }
+
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            padding: 30px;
+            border-top: 2px solid rgba(124, 58, 237, 0.3);
+            color: #a0a0b0;
+        }
+
+        .footer-links {
+            margin-top: 15px;
+        }
+
+        .footer-links a {
+            color: #a855f7;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #7c3aed;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Olist E-Commerce Analytics Dashboard</h1>
+            <p class="subtitle">Brazilian E-Commerce Data Analysis | 2016-2018</p>
+        </header>
+
+        <!-- KPI Section -->
+        <div class="kpi-section">
+            <div class="kpi-card">
+                <div class="kpi-label">Total Revenue</div>
+                <div class="kpi-value">R$ 15.9M</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Total Orders</div>
+                <div class="kpi-value">99,441</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Customers</div>
+                <div class="kpi-value">96,096</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Avg Order Value</div>
+                <div class="kpi-value">R$ 160.15</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Avg Review Score</div>
+                <div class="kpi-value">4.16 / 5.0</div>
+            </div>
+        </div>
+
+        <!-- Key Insights Section -->
+        <div class="insights-section">
+            <h2>Key Business Insights</h2>
+            <div class="insight-grid">
+                <div class="insight-card">
+                    <h3>Critical Retention Problem</h3>
+                    <p><strong>96.8%</strong> of customers make only ONE purchase. Only 3.2% return for a second order. This indicates a massive customer retention issue that needs immediate attention.</p>
+                </div>
+                <div class="insight-card">
+                    <h3>Delivery Delays Impact Satisfaction</h3>
+                    <p>Late deliveries (6.8% of orders) cause review scores to drop by <strong>2.02 points</strong>. On-time delivery = 4.2 stars, late delivery = 2.18 stars.</p>
+                </div>
+                <div class="insight-card">
+                    <h3>Top Performing Category</h3>
+                    <p><strong>Beleza/Saude (Beauty/Health)</strong> generates R$ 1.26M in revenue, followed by Relogios/Presentes (R$ 1.1M) and Esporte/Lazer (R$ 965K).</p>
+                </div>
+                <div class="insight-card">
+                    <h3>Geographic Concentration</h3>
+                    <p>Sao Paulo (SP) dominates with <strong>41.8%</strong> of all orders, followed by Rio de Janeiro (12.8%) and Minas Gerais (11.6%). Top 3 states = 66.2% of business.</p>
+                </div>
+                <div class="insight-card">
+                    <h3>Payment Preferences</h3>
+                    <p><strong>Credit card</strong> is the dominant payment method (73.9% of orders, R$ 12.4M revenue). Boleto (bank slip) is second at 19.6%.</p>
+                </div>
+                <div class="insight-card">
+                    <h3>Revenue Growth Trend</h3>
+                    <p>Revenue peaked in <strong>November 2017</strong> at R$ 1.5M, likely due to Black Friday. Average monthly revenue: R$ 639K. Strong seasonality detected.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Tabs -->
+        <div class="dashboard-tabs">
+            <button class="tab-button active" onclick="showSection('executive')">Executive Dashboard</button>
+            <button class="tab-button" onclick="showSection('revenue')">Revenue Analysis</button>
+            <button class="tab-button" onclick="showSection('products')">Product Performance</button>
+            <button class="tab-button" onclick="showSection('customers')">Customer Insights</button>
+            <button class="tab-button" onclick="showSection('delivery')">Delivery Metrics</button>
+            <button class="tab-button" onclick="showSection('payments')">Payment Analysis</button>
+        </div>
+
+        <!-- Executive Dashboard -->
+        <div id="executive" class="chart-section active">
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>Executive Overview Dashboard</h3>
+                    <img src="reports/charts/06_executive_dashboard.png" alt="Executive Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue Analysis -->
+        <div id="revenue" class="chart-section">
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>Revenue Performance Dashboard</h3>
+                    <img src="reports/charts/01_revenue_dashboard.png" alt="Revenue Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Performance -->
+        <div id="products" class="chart-section">
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>Product Category Analysis</h3>
+                    <img src="reports/charts/02_category_analysis.png" alt="Category Analysis">
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Insights -->
+        <div id="customers" class="chart-section">
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>Customer Behavior & Segmentation</h3>
+                    <img src="reports/charts/03_customer_behavior.png" alt="Customer Behavior">
+                </div>
+            </div>
+        </div>
+
+        <!-- Delivery Metrics -->
+        <div id="delivery" class="chart-section">
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>Delivery Performance Analysis</h3>
+                    <img src="reports/charts/04_delivery_performance.png" alt="Delivery Performance">
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Analysis -->
+        <div id="payments" class="chart-section">
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>Payment Methods & Trends</h3>
+                    <img src="reports/charts/05_payment_analysis.png" alt="Payment Analysis">
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p><strong>Olist E-Commerce Analytics Project</strong></p>
+            <p>Data Source: Brazilian E-Commerce Public Dataset by Olist | 99,441 orders | R$ 15.9M revenue | 2016-2018</p>
+            <div class="footer-links">
+                <a href="README.md">Project Documentation</a>
+                <a href="reports/business_insights.txt">Full Insights Report</a>
+                <a href="https://github.com/yourusername/olist-analytics" target="_blank">GitHub Repository</a>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.9em;">Built with Python, Pandas, SQLite, Matplotlib & Seaborn</p>
+        </footer>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.chart-section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Add hover effect to KPI cards
+        document.querySelectorAll('.kpi-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.animation = 'none';
+                setTimeout(() => {
+                    this.style.animation = 'fadeIn 0.5s ease';
+                }, 10);
+            });
+        });
+    </script>
+</body>
+</html>

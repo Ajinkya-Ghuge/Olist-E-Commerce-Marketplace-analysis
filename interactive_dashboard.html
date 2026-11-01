@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olist E-Commerce Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            padding: 20px 40px;
+            border-bottom: 2px solid #7c3aed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-title h1 {
+            font-size: 1.8em;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .header-subtitle {
+            font-size: 0.9em;
+            color: #9ca3af;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #7c3aed;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #6d28d9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(124, 58, 237, 0.15);
+            color: #a78bfa;
+            border: 1px solid #7c3aed;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(124, 58, 237, 0.25);
+        }
+
+        .filter-bar {
+            background: #16162a;
+            padding: 15px 40px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            border-bottom: 1px solid #2a2a3e;
+        }
+
+        .filter-label {
+            color: #9ca3af;
+            font-size: 0.85em;
+            margin-right: 5px;
+        }
+
+        .filter-tag {
+            padding: 6px 14px;
+            background: rgba(124, 58, 237, 0.2);
+            border: 1px solid #7c3aed;
+            border-radius: 20px;
+            font-size: 0.85em;
+            color: #a78bfa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tag:hover {
+            background: rgba(124, 58, 237, 0.35);
+        }
+
+        .filter-tag.active {
+            background: #7c3aed;
+            color: white;
+        }
+
+        .container {
+            padding: 30px 40px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16162a 100%);
+            border: 1px solid #2a2a3e;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #7c3aed, #a855f7);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+            border-color: #7c3aed;
+        }
+
+        .kpi-label {
+            font-size: 0.8em;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .kpi-change {
+            font-size: 0.85em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .kpi-change.positive {
+            color: #10b981;
+        }
+
+        .kpi-change.negative {
+            color: #ef4444;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 20px;
+        }
+
+        .chart-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16162a 100%);
+            border: 1px solid #2a2a3e;
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .chart-card:hover {
+            border-color: #7c3aed;
+            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.2);
+        }
+
+        .chart-card.span-6 {
+            grid-column: span 6;
+        }
+
+        .chart-card.span-4 {
+            grid-column: span 4;
+        }
+
+        .chart-card.span-8 {
+            grid-column: span 8;
+        }
+
+        .chart-card.span-12 {
+            grid-column: span 12;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .chart-subtitle {
+            font-size: 0.85em;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
+        .chart-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #2a2a3e;
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #9ca3af;
+        }
+
+        .icon-btn:hover {
+            background: rgba(124, 58, 237, 0.25);
+            border-color: #7c3aed;
+            color: #a78bfa;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .insight-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(124, 58, 237, 0.2);
+            border: 1px solid #7c3aed;
+            border-radius: 12px;
+            font-size: 0.75em;
+            color: #a78bfa;
+            margin-left: 10px;
+        }
+
+        .insight-panel {
+            background: rgba(124, 58, 237, 0.1);
+            border-left: 3px solid #7c3aed;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 6px;
+        }
+
+        .insight-text {
+            font-size: 0.9em;
+            color: #d1d5db;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 1200px) {
+            .chart-card.span-6, .chart-card.span-8, .chart-card.span-4 {
+                grid-column: span 12;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(124, 58, 237, 0.3);
+            border-radius: 50%;
+            border-top-color: #7c3aed;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-title">
+            <h1>Olist E-Commerce Analytics</h1>
+            <div class="header-subtitle">Brazilian Marketplace • 2016-2018 • R$ 15.9M Revenue</div>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-secondary">Export PDF</button>
+            <button class="btn btn-primary">Share Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <span class="filter-label">FILTER BY:</span>
+        <span class="filter-tag active">All Time</span>
+        <span class="filter-tag">2017</span>
+        <span class="filter-tag">2018</span>
+        <span class="filter-tag">Last Quarter</span>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">Total Revenue</div>
+                <div class="kpi-value">R$ 15.9M</div>
+                <div class="kpi-change positive">
+                    <span>↑</span> 12.5% vs previous period
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Total Orders</div>
+                <div class="kpi-value">99,441</div>
+                <div class="kpi-change positive">
+                    <span>↑</span> 8.3% growth
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Unique Customers</div>
+                <div class="kpi-value">96,096</div>
+                <div class="kpi-change negative">
+                    <span>↓</span> 96.8% one-time buyers
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Avg Order Value</div>
+                <div class="kpi-value">R$ 160</div>
+                <div class="kpi-change positive">
+                    <span>↑</span> 5.2% increase
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Review Score</div>
+                <div class="kpi-value">4.16 / 5</div>
+                <div class="kpi-change positive">
+                    <span>↑</span> 59% gave 5 stars
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="dashboard-grid">
+            <!-- Monthly Revenue Trend -->
+            <div class="chart-card span-8">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">
+                            Monthly Revenue Trend
+                            <span class="insight-badge">Peak: Nov 2017</span>
+                        </div>
+                        <div class="chart-subtitle">Revenue performance over 23 months</div>
+                    </div>
+                    <div class="chart-actions">
+                        <div class="icon-btn">↻</div>
+                        <div class="icon-btn">⋮</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+                <div class="insight-panel">
+                    <div class="insight-text">
+                        <strong>Key Insight:</strong> Revenue peaked at R$ 1.15M in November 2017 (Black Friday effect). Average monthly revenue: R$ 639K.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Frequency Distribution -->
+            <div class="chart-card span-4">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Customer Purchase Frequency</div>
+                        <div class="chart-subtitle">Retention crisis identified</div>
+                    </div>
+                    <div class="chart-actions">
+                        <div class="icon-btn">↻</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="frequencyChart"></canvas>
+                </div>
+                <div class="insight-panel">
+                    <div class="insight-text">
+                        <strong>Critical Issue:</strong> 96.8% one-time buyers
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Categories -->
+            <div class="chart-card span-6">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Top 10 Product Categories</div>
+                        <div class="chart-subtitle">By total revenue</div>
+                    </div>
+                    <div class="chart-actions">
+                        <div class="icon-btn">↻</div>
+                        <div class="icon-btn">⋮</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="categoriesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="chart-card span-6">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">Payment Method Distribution</div>
+                        <div class="chart-subtitle">Transaction count by payment type</div>
+                    </div>
+                    <div class="chart-actions">
+                        <div class="icon-btn">↻</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="paymentChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Delivery Performance by State -->
+            <div class="chart-card span-12">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title">
+                            Delivery Performance by State
+                            <span class="insight-badge">Late Delivery Impact</span>
+                        </div>
+                        <div class="chart-subtitle">Top 10 states: Order volume vs Late delivery percentage</div>
+                    </div>
+                    <div class="chart-actions">
+                        <div class="icon-btn">↻</div>
+                        <div class="icon-btn">⋮</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="deliveryChart"></canvas>
+                </div>
+                <div class="insight-panel">
+                    <div class="insight-text">
+                        <strong>Geographic Insight:</strong> SP dominates with 40K orders but has 5.89% late deliveries. RJ and BA have higher late delivery rates (13-14%), impacting satisfaction.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chart.js global configuration
+        Chart.defaults.color = '#9ca3af';
+        Chart.defaults.borderColor = '#2a2a3e';
+        Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+
+        // Monthly Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['Sep 16', 'Oct 16', 'Dec 16', 'Jan 17', 'Feb 17', 'Mar 17', 'Apr 17', 'May 17', 'Jun 17', 'Jul 17', 'Aug 17', 'Sep 17', 'Oct 17', 'Nov 17', 'Dec 17', 'Jan 18', 'Feb 18', 'Mar 18', 'Apr 18', 'May 18', 'Jun 18', 'Jul 18', 'Aug 18'],
+                datasets: [{
+                    label: 'Revenue (R$ Thousands)',
+                    data: [143, 46490, 19, 127482, 271239, 414330, 390812, 566851, 490050, 566299, 645832, 701077, 751117, 1153364, 843078, 1077887, 966168, 1120598, 1132878, 1128774, 1011978, 1027807, 985491].map(v => v / 1000),
+                    borderColor: '#7c3aed',
+                    backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: '#7c3aed',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                        titleColor: '#ffffff',
+                        bodyColor: '#e0e0e0',
+                        borderColor: '#7c3aed',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return 'Revenue: R$ ' + context.parsed.y.toFixed(0) + 'K';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#2a2a3e' },
+                        ticks: {
+                            callback: function(value) {
+                                return 'R$ ' + value + 'K';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Customer Frequency Doughnut Chart
+        const frequencyCtx = document.getElementById('frequencyChart').getContext('2d');
+        new Chart(frequencyCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['1 Purchase', '2 Purchases', '3+ Purchases'],
+                datasets: [{
+                    data: [96.88, 2.86, 0.26],
+                    backgroundColor: ['#7c3aed', '#a855f7', '#c084fc'],
+                    borderColor: '#16162a',
+                    borderWidth: 3,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 15, color: '#e0e0e0' }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                        titleColor: '#ffffff',
+                        bodyColor: '#e0e0e0',
+                        borderColor: '#7c3aed',
+                        borderWidth: 1,
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Top Categories Bar Chart
+        const categoriesCtx = document.getElementById('categoriesChart').getContext('2d');
+        new Chart(categoriesCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Beleza/Saude', 'Relogios/Presentes', 'Cama/Mesa/Banho', 'Esporte/Lazer', 'Informatica', 'Moveis/Decoracao', 'Cool Stuff', 'Utilidades', 'Automotivo', 'Ferramentas'],
+                datasets: [{
+                    label: 'Revenue (R$ Thousands)',
+                    data: [1258.68, 1205.01, 1036.99, 988.05, 911.95, 729.76, 635.29, 632.25, 592.72, 485.26],
+                    backgroundColor: '#7c3aed',
+                    hoverBackgroundColor: '#a855f7',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                        titleColor: '#ffffff',
+                        bodyColor: '#e0e0e0',
+                        borderColor: '#7c3aed',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return 'Revenue: R$ ' + context.parsed.x.toFixed(2) + 'K';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#2a2a3e' },
+                        ticks: {
+                            callback: function(value) {
+                                return 'R$ ' + value + 'K';
+                            }
+                        }
+                    },
+                    y: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Payment Methods Pie Chart
+        const paymentCtx = document.getElementById('paymentChart').getContext('2d');
+        new Chart(paymentCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Credit Card', 'Boleto', 'Voucher', 'Debit Card'],
+                datasets: [{
+                    data: [76795, 19784, 5775, 1529],
+                    backgroundColor: ['#7c3aed', '#a855f7', '#c084fc', '#e9d5ff'],
+                    borderColor: '#16162a',
+                    borderWidth: 3,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 15, color: '#e0e0e0' }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                        titleColor: '#ffffff',
+                        bodyColor: '#e0e0e0',
+                        borderColor: '#7c3aed',
+                        borderWidth: 1,
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return context.label + ': ' + context.parsed.toLocaleString() + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Delivery Performance Multi-axis Chart
+        const deliveryCtx = document.getElementById('deliveryChart').getContext('2d');
+        new Chart(deliveryCtx, {
+            type: 'bar',
+            data: {
+                labels: ['SP', 'RJ', 'MG', 'RS', 'PR', 'SC', 'BA', 'DF', 'ES', 'GO'],
+                datasets: [
+                    {
+                        type: 'bar',
+                        label: 'Total Orders (Thousands)',
+                        data: [40.494, 12.350, 11.354, 5.344, 4.923, 3.546, 3.256, 2.080, 1.995, 1.957],
+                        backgroundColor: 'rgba(124, 58, 237, 0.7)',
+                        yAxisID: 'y',
+                        borderRadius: 6
+                    },
+                    {
+                        type: 'line',
+                        label: 'Late Delivery %',
+                        data: [5.89, 13.47, 5.61, 7.15, 5.0, 9.76, 14.04, 7.07, 12.23, 8.18],
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        yAxisID: 'y1',
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#ef4444',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { padding: 20, color: '#e0e0e0' }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                        titleColor: '#ffffff',
+                        bodyColor: '#e0e0e0',
+                        borderColor: '#7c3aed',
+                        borderWidth: 1,
+                        padding: 12
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        grid: { color: '#2a2a3e' },
+                        ticks: {
+                            callback: function(value) {
+                                return value + 'K';
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Total Orders',
+                            color: '#9ca3af'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: { display: false },
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Late Delivery %',
+                            color: '#ef4444'
+                        }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Add interactivity to filter tags
+        document.querySelectorAll('.filter-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
